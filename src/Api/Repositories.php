@@ -6,7 +6,7 @@ declare(strict_types=1);
  * This file is part of the Gitlab API library.
  *
  * (c) Matt Humphrey <matth@windsor-telecom.co.uk>
- * (c) Graham Campbell <graham@alt-three.com>
+ * (c) Graham Campbell <hello@gjcampbell.co.uk>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -152,7 +152,7 @@ class Repositories extends AbstractApi
      */
     public function createRelease($project_id, string $tag_name, string $description)
     {
-        return $this->post($this->getProjectPath($project_id, 'repository/tags/'.self::encodePath($tag_name).'/release'), [
+        return $this->post($this->getProjectPath($project_id, 'releases'), [
             'id' => $project_id,
             'tag_name' => $tag_name,
             'description' => $description,
@@ -168,7 +168,7 @@ class Repositories extends AbstractApi
      */
     public function updateRelease($project_id, string $tag_name, string $description)
     {
-        return $this->put($this->getProjectPath($project_id, 'repository/tags/'.self::encodePath($tag_name).'/release'), [
+        return $this->put($this->getProjectPath($project_id, 'releases/'.self::encodePath($tag_name)), [
             'id' => $project_id,
             'tag_name' => $tag_name,
             'description' => $description,
@@ -403,20 +403,25 @@ class Repositories extends AbstractApi
     }
 
     /**
-     * @param int|string $project_id
-     * @param string     $fromShaOrMaster
-     * @param string     $toShaOrMaster
-     * @param bool       $straight
+     * @param int|string  $project_id
+     * @param string      $fromShaOrMaster
+     * @param string      $toShaOrMaster
+     * @param bool        $straight
+     * @param string|null $fromProjectId
      *
      * @return mixed
      */
-    public function compare($project_id, string $fromShaOrMaster, string $toShaOrMaster, bool $straight = false)
+    public function compare($project_id, string $fromShaOrMaster, string $toShaOrMaster, bool $straight = false, string $fromProjectId = null)
     {
         $params = [
-            'from' => self::encodePath($fromShaOrMaster),
-            'to' => self::encodePath($toShaOrMaster),
-            'straight' => self::encodePath($straight ? 'true' : 'false'),
+            'from' => $fromShaOrMaster,
+            'to' => $toShaOrMaster,
+            'straight' => $straight ? 'true' : 'false',
         ];
+
+        if (null !== $fromProjectId) {
+            $params['from_project_id'] = self::encodePath($fromProjectId);
+        }
 
         return $this->get($this->getProjectPath($project_id, 'repository/compare'), $params);
     }
@@ -425,7 +430,7 @@ class Repositories extends AbstractApi
      * @param int|string $project_id
      * @param string     $sha
      *
-     * @return string
+     * @return mixed
      */
     public function diff($project_id, string $sha)
     {

@@ -6,7 +6,7 @@ declare(strict_types=1);
  * This file is part of the Gitlab API library.
  *
  * (c) Matt Humphrey <matth@windsor-telecom.co.uk>
- * (c) Graham Campbell <graham@alt-three.com>
+ * (c) Graham Campbell <hello@gjcampbell.co.uk>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -628,6 +628,43 @@ class IssuesTest extends TestCase
         ;
 
         $this->assertEquals($expectedArray, $api->showParticipants(1, 2));
+    }
+
+    /**
+     * @test
+     */
+    public function shouldGetIssueResourceLabelEvents(): void
+    {
+        $expectedArray = [
+            ['id' => 1, 'resource_type' => 'Issue', 'action' => 'add'],
+            ['id' => 2, 'resource_type' => 'Issue', 'action' => 'add'],
+        ];
+
+        $api = $this->getApiMock();
+        $api->expects($this->once())
+            ->method('get')
+            ->with('projects/1/issues/2/resource_label_events')
+            ->will($this->returnValue($expectedArray))
+        ;
+
+        $this->assertEquals($expectedArray, $api->showResourceLabelEvents(1, 2));
+    }
+
+    /**
+     * @test
+     */
+    public function shouldGetIssueResourceLabelEvent(): void
+    {
+        $expectedArray = ['id' => 1, 'resource_type' => 'Issue', 'action' => 'add'];
+
+        $api = $this->getApiMock();
+        $api->expects($this->once())
+            ->method('get')
+            ->with('projects/1/issues/2/resource_label_events/3')
+            ->will($this->returnValue($expectedArray))
+        ;
+
+        $this->assertEquals($expectedArray, $api->showResourceLabelEvent(1, 2, 3));
     }
 
     protected function getApiClass()

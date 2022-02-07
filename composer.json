@@ -6,35 +6,39 @@
     "authors": [
         {
             "name": "Fabien Bourigault",
-            "email": "bourigaultfabien@gmail.com"
+            "email": "bourigaultfabien@gmail.com",
+            "homepage": "https://github.com/fbourigault"
         },
         {
             "name": "Graham Campbell",
-            "email": "graham@alt-three.com"
+            "email": "hello@gjcampbell.co.uk",
+            "homepage": "https://github.com/GrahamCampbell"
         },
         {
             "name": "Matt Humphrey",
-            "email": "matth@windsor-telecom.co.uk"
+            "email": "matth@windsor-telecom.co.uk",
+            "homepage": "https://github.com/m4tthumphrey"
         },
         {
             "name": "Miguel Piedrafita",
-            "email": "github@miguelpiedrafita.com"
+            "email": "github@miguelpiedrafita.com",
+            "homepage": "https://github.com/m1guelpf"
         }
     ],
     "require": {
         "php": "^7.2.5 || ^8.0",
         "ext-json": "*",
         "ext-xml": "*",
-        "php-http/cache-plugin": "^1.7.1",
+        "php-http/cache-plugin": "^1.7.2",
         "php-http/client-common": "^2.3",
         "php-http/discovery": "^1.12",
         "php-http/httplug": "^2.2",
         "php-http/multipart-stream-builder": "^1.1.2",
-        "psr/cache": "^1.0",
+        "psr/cache": "^1.0 || ^2.0",
         "psr/http-client-implementation": "^1.0",
         "psr/http-factory-implementation": "^1.0",
         "psr/http-message": "^1.0",
-        "symfony/options-resolver": "^3.4 || ^4.0 || ^5.0",
+        "symfony/options-resolver": "^3.4 || ^4.0 || ^5.0 || ^6.0",
         "symfony/polyfill-php80": "^1.17"
     },
     "require-dev": {

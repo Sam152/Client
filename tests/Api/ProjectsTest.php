@@ -6,7 +6,7 @@ declare(strict_types=1);
  * This file is part of the Gitlab API library.
  *
  * (c) Matt Humphrey <matth@windsor-telecom.co.uk>
- * (c) Graham Campbell <graham@alt-three.com>
+ * (c) Graham Campbell <hello@gjcampbell.co.uk>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -2215,6 +2215,23 @@ class ProjectsTest extends TestCase
             )
             ->will($this->returnValue($expectedArray));
         $this->assertEquals($expectedArray, $api->addProtectedBranch(1, ['name' => 'master', 'push_access_level' => 0, 'merge_access_level' => 30]));
+    }
+
+    /**
+     * @test
+     */
+    public function shouldRemoveProtectedBranch(): void
+    {
+        $expectedBool = true;
+        $api = $this->getApiMock();
+        $api->expects($this->once())
+            ->method('delete')
+            ->with(
+                'projects/1/protected_branches/test-branch'
+            )
+            ->will($this->returnValue($expectedBool));
+
+        $this->assertEquals($expectedBool, $api->deleteProtectedBranch(1, 'test-branch'));
     }
 
     /**

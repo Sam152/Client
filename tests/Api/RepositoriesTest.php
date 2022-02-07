@@ -6,7 +6,7 @@ declare(strict_types=1);
  * This file is part of the Gitlab API library.
  *
  * (c) Matt Humphrey <matth@windsor-telecom.co.uk>
- * (c) Graham Campbell <graham@alt-three.com>
+ * (c) Graham Campbell <hello@gjcampbell.co.uk>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -195,7 +195,7 @@ class RepositoriesTest extends TestCase
         $api = $this->getApiMock();
         $api->expects($this->once())
             ->method('post')
-            ->with('projects/'.$project_id.'/repository/tags/'.$tagName.'/release', [
+            ->with('projects/'.$project_id.'/releases', [
                 'id' => $project_id,
                 'tag_name' => $tagName,
                 'description' => $description,
@@ -220,7 +220,7 @@ class RepositoriesTest extends TestCase
         $api = $this->getApiMock();
         $api->expects($this->once())
             ->method('put')
-            ->with('projects/'.$project_id.'/repository/tags/'.$tagName.'/release', [
+            ->with('projects/'.$project_id.'/releases/'.$tagName, [
                 'id' => $project_id,
                 'tag_name' => $tagName,
                 'description' => $description,
@@ -539,6 +539,40 @@ class RepositoriesTest extends TestCase
         ;
 
         $this->assertEquals($expectedArray, $api->compare(1, 'master', 'feature'));
+    }
+
+    /**
+     * @test
+     */
+    public function shouldCompareComplexBranchName(): void
+    {
+        $expectedArray = ['commit' => 'object'];
+
+        $api = $this->getApiMock();
+        $api->expects($this->once())
+            ->method('get')
+            ->with('projects/1/repository/compare', ['from' => 'master', 'to' => 'feature/760.fake-branch', 'straight' => 'true'])
+            ->will($this->returnValue($expectedArray))
+        ;
+
+        $this->assertEquals($expectedArray, $api->compare(1, 'master', 'feature/760.fake-branch', true));
+    }
+
+    /**
+     * @test
+     */
+    public function shouldCompareWithFromProjectId(): void
+    {
+        $expectedArray = ['commit' => 'object'];
+
+        $api = $this->getApiMock();
+        $api->expects($this->once())
+            ->method('get')
+            ->with('projects/1/repository/compare', ['from' => 'master', 'to' => 'feature', 'straight' => 'true', 'from_project_id' => '123'])
+            ->will($this->returnValue($expectedArray))
+        ;
+
+        $this->assertEquals($expectedArray, $api->compare(1, 'master', 'feature', true, '123'));
     }
 
     /**

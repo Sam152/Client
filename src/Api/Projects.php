@@ -6,7 +6,7 @@ declare(strict_types=1);
  * This file is part of the Gitlab API library.
  *
  * (c) Matt Humphrey <matth@windsor-telecom.co.uk>
- * (c) Graham Campbell <graham@alt-three.com>
+ * (c) Graham Campbell <hello@gjcampbell.co.uk>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -49,6 +49,7 @@ class Projects extends AbstractApi
      *     @var bool               $wiki_checksum_failed        Limit by failed wiki checksum calculation
      *     @var bool               $with_custom_attributes      Include custom attributes in response
      *     @var string             $with_programming_language   Limit by programming language
+     *     @var string             $topic                       Limit by topic
      * }
      *
      * @throws UndefinedOptionsException If an option name is undefined
@@ -147,6 +148,7 @@ class Projects extends AbstractApi
             ->setNormalizer('with_custom_attributes', $booleanNormalizer)
         ;
         $resolver->setDefined('with_programming_language');
+        $resolver->setDefined('topic');
 
         return $this->get('projects', $resolver->resolve($parameters));
     }
@@ -473,6 +475,12 @@ class Projects extends AbstractApi
     {
         $resolver = $this->createOptionsResolver();
         $resolver->setDefined('query');
+        $resolver->setDefined('user_ids')
+            ->setAllowedTypes('user_ids', 'array')
+            ->setAllowedValues('user_ids', function (array $value) {
+                return \count($value) === \count(\array_filter($value, 'is_int'));
+            })
+        ;
 
         return $this->get('projects/'.self::encodePath($project_id).'/members/all', $resolver->resolve($parameters));
     }
@@ -492,6 +500,12 @@ class Projects extends AbstractApi
 
         $resolver->setDefined('query')
             ->setAllowedTypes('query', 'string')
+        ;
+        $resolver->setDefined('user_ids')
+            ->setAllowedTypes('user_ids', 'array')
+            ->setAllowedValues('user_ids', function (array $value) {
+                return \count($value) === \count(\array_filter($value, 'is_int'));
+            })
         ;
 
         return $this->get($this->getProjectPath($project_id, 'members'), $resolver->resolve($parameters));
@@ -626,7 +640,7 @@ class Projects extends AbstractApi
      * @param int|string $project_id
      * @param array      $parameters
      *
-     * @return array
+     * @return mixed
      */
     public function users($project_id, array $parameters = [])
     {
@@ -641,8 +655,7 @@ class Projects extends AbstractApi
      * @param int|string $project_id
      * @param array      $parameters
      *
-     * @return array
-     *               List of project issues
+     * @return mixed
      */
     public function issues($project_id, array $parameters = [])
     {
@@ -656,7 +669,7 @@ class Projects extends AbstractApi
      *
      * @param int|string $project_id
      *
-     * @return array
+     * @return mixed
      */
     public function boards($project_id)
     {
@@ -1221,6 +1234,17 @@ class Projects extends AbstractApi
     public function addProtectedBranch($project_id, array $parameters = [])
     {
         return $this->post($this->getProjectPath($project_id, 'protected_branches'), $parameters);
+    }
+
+    /**
+     * @param int|string $project_id
+     * @param string     $branch_name
+     *
+     * @return mixed
+     */
+    public function deleteProtectedBranch($project_id, string $branch_name)
+    {
+        return $this->delete($this->getProjectPath($project_id, 'protected_branches/'.self::encodePath($branch_name)));
     }
 
     /**

@@ -6,7 +6,7 @@ declare(strict_types=1);
  * This file is part of the Gitlab API library.
  *
  * (c) Matt Humphrey <matth@windsor-telecom.co.uk>
- * (c) Graham Campbell <graham@alt-three.com>
+ * (c) Graham Campbell <hello@gjcampbell.co.uk>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -39,6 +39,11 @@ class MergeRequests extends AbstractApi
      * @var string
      */
     public const STATE_CLOSED = 'closed';
+
+    /**
+     * @var string
+     */
+    public const STATE_LOCKED = 'locked';
 
     /**
      * @param int|string|null $project_id
@@ -76,7 +81,7 @@ class MergeRequests extends AbstractApi
             })
         ;
         $resolver->setDefined('state')
-            ->setAllowedValues('state', [self::STATE_ALL, self::STATE_MERGED, self::STATE_OPENED, self::STATE_CLOSED])
+            ->setAllowedValues('state', [self::STATE_ALL, self::STATE_MERGED, self::STATE_OPENED, self::STATE_CLOSED, self::STATE_LOCKED])
         ;
         $resolver->setDefined('scope')
             ->setAllowedValues('scope', ['created-by-me', 'assigned-to-me', 'all'])

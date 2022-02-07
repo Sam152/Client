@@ -6,7 +6,7 @@ declare(strict_types=1);
  * This file is part of the Gitlab API library.
  *
  * (c) Matt Humphrey <matth@windsor-telecom.co.uk>
- * (c) Graham Campbell <graham@alt-three.com>
+ * (c) Graham Campbell <hello@gjcampbell.co.uk>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -37,7 +37,7 @@ class Issues extends AbstractApi
      *     @var string $labels               comma-separated list of label names, issues must have all labels to be returned
      *     @var bool   $with_labels_details  if true, response will return more details for each label
      *     @var string $milestone            the milestone title
-     *     @var string scope                 return issues for the given scope: created-by-me, assigned-to-me or all (default is created-by-me)
+     *     @var string $scope                return issues for the given scope: created-by-me, assigned-to-me or all (default is created-by-me)
      *     @var int[]  $iids                 return only the issues having the given iid
      *     @var string $order_by             return requests ordered by created_at or updated_at fields (default is created_at)
      *     @var string $sort                 return requests sorted in asc or desc order (default is desc)
@@ -347,7 +347,7 @@ class Issues extends AbstractApi
      * @param int|string $project_id The ID or URL-encoded path of the project owned by the authenticated user
      * @param int        $issue_iid  The internal ID of a project’s issue
      *
-     * @return array|string issue object if change is made, empty string otherwise
+     * @return mixed
      */
     public function subscribe($project_id, int $issue_iid)
     {
@@ -363,7 +363,7 @@ class Issues extends AbstractApi
      * @param int|string $project_id The ID or URL-encoded path of the project owned by the authenticated user
      * @param int        $issue_iid  The internal ID of a project’s issue
      *
-     * @return array|string issue object if change is made, empty string otherwise
+     * @return mixed
      */
     public function unsubscribe($project_id, int $issue_iid)
     {
@@ -424,6 +424,29 @@ class Issues extends AbstractApi
     public function showParticipants($project_id, int $issue_iid)
     {
         return $this->get($this->getProjectPath($project_id, 'issues/'.self::encodePath($issue_iid)).'/participants');
+    }
+
+    /**
+     * @param int|string $project_id
+     * @param int        $issue_iid
+     *
+     * @return mixed
+     */
+    public function showResourceLabelEvents($project_id, int $issue_iid)
+    {
+        return $this->get($this->getProjectPath($project_id, 'issues/'.self::encodePath($issue_iid)).'/resource_label_events');
+    }
+
+    /**
+     * @param int|string $project_id
+     * @param int        $issue_iid
+     * @param int        $resource_label_event_id
+     *
+     * @return mixed
+     */
+    public function showResourceLabelEvent($project_id, int $issue_iid, int $resource_label_event_id)
+    {
+        return $this->get($this->getProjectPath($project_id, 'issues/'.self::encodePath($issue_iid)).'/resource_label_events/'.self::encodePath($resource_label_event_id));
     }
 
     /**

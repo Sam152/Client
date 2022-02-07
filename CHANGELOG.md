@@ -5,9 +5,34 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [11.5.0] - UPCOMING
+## [11.5.1] - 2022-01-23
 
-[11.5.0]: https://github.com/GitLabPHP/Client/compare/11.4.0...11.5.0
+* Fixed release API paths
+
+[11.5.1]: https://github.com/GitLabPHP/Client/compare/11.5.0...11.5.1
+
+## [11.5.0] - 2021-12-26
+
+* Added support for filtering environments by state
+* Added support for approval rules endpoints
+* Added support for toggling the activate state of users
+* Added support for managing packages
+* Added support for filtering projects by topics
+* Added support for locked merge requests
+* Added support for filtering groups and projects by user
+* Added support for removing protected branches
+* Added support for `psr/cache:^2.0`
+* Added support for `symfony/options-resolver:^6.0`
+* Added support for PHP 8.1
+
+[11.5.0]: https://github.com/GitLabPHP/Client/compare/11.4.1...11.5.0
+
+## [11.4.1] - 2021-12-26
+
+* Fixed creating environments
+* Fixed double encoding of query parameters when comparing commits
+
+[11.4.1]: https://github.com/GitLabPHP/Client/compare/11.4.0...11.4.1
 
 ## [11.4.0] - 2021-03-27
 
