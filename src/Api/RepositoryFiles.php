@@ -23,6 +23,20 @@ class RepositoryFiles extends AbstractApi
      * @param string     $file_path
      * @param string     $ref
      *
+     * @return \Psr\Http\Message\ResponseInterface
+     */
+    public function headFile($project_id, string $file_path, string $ref)
+    {
+        return $this->head($this->getProjectPath($project_id, 'repository/files/'.self::encodePath($file_path)), [
+            'ref' => $ref,
+        ]);
+    }
+
+    /**
+     * @param int|string $project_id
+     * @param string     $file_path
+     * @param string     $ref
+     *
      * @return mixed
      */
     public function getFile($project_id, string $file_path, string $ref)

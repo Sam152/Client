@@ -65,6 +65,26 @@ abstract class AbstractApi
     }
 
     /**
+     * Send a HEAD request with query params and return the raw response.
+     *
+     * @param string               $uri
+     * @param array                $params
+     * @param array<string,string> $headers
+     *
+     * @throws \Http\Client\Exception
+     *
+     * @return \Psr\Http\Message\ResponseInterface
+     */
+    protected function headAsResponse(string $uri, array $params = [], array $headers = []): ResponseInterface
+    {
+        if (null !== $this->perPage && !isset($params['per_page'])) {
+            $params['per_page'] = $this->perPage;
+        }
+
+        return $this->client->getHttpClient()->head(self::prepareUri($uri, $params), $headers);
+    }
+
+    /**
      * Send a GET request with query params and return the raw response.
      *
      * @param string               $uri
@@ -82,6 +102,18 @@ abstract class AbstractApi
         }
 
         return $this->client->getHttpClient()->get(self::prepareUri($uri, $params), $headers);
+    }
+
+    /**
+     * @param string               $uri
+     * @param array<string,mixed>  $params
+     * @param array<string,string> $headers
+     *
+     * @return mixed
+     */
+    protected function head(string $uri, array $params = [], array $headers = [])
+    {
+        return $this->headAsResponse($uri, $params, $headers);
     }
 
     /**
